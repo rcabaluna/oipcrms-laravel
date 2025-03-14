@@ -1,6 +1,7 @@
 import MainLayout from "@/Layouts/MainLayout";
 import React from "react";
 import IndicatorsTable from "./Partials/IndicatorsTable";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Indicators = ({ indicators }) => {
     return (
@@ -17,9 +18,16 @@ const Indicators = ({ indicators }) => {
                     </div>
                 </div>
                 <div className="grid auto-rows-min gap-4 pt-5 md:grid-cols-1">
-                    <div className="table-container">
-                        <IndicatorsTable indicators={indicators} />
-                    </div>
+                    <Tabs defaultValue="psto">
+                        <TabsList>
+                            <TabsTrigger value="psto">PSTO</TabsTrigger>
+                            <TabsTrigger value="tsd">TSD</TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="psto">
+                            <IndicatorsTable indicators={indicators} />
+                        </TabsContent>
+                        <TabsContent value="tsd">-</TabsContent>
+                    </Tabs>
                 </div>
             </div>
         </>

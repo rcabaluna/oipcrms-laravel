@@ -34,6 +34,19 @@ const IndicatorsTable = ({ indicators = [] }) => {
         fetchGroups();
     }, []);
 
+    const indAlignmentsOptions = indAlignments.map((item) => ({
+        value: item.indicators_alignment_id,
+        label: item.indicators_alignment_name,
+    }));
+
+    const indSettingsOptions = [
+        { value: "", label: "-" },
+        ...indSettings.map((item) => ({
+            value: item.indicator_settings_id,
+            label: item.indicator_settings_name,
+        })),
+    ];
+
     return (
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
             <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min">
@@ -58,10 +71,11 @@ const IndicatorsTable = ({ indicators = [] }) => {
                                 />
                             ) : (
                                 <NewRow
+                                    rows={indicators}
                                     key={`new-row-${index}`}
                                     indicator={indicator}
-                                    indAlignments={indAlignments}
-                                    indSettings={indSettings}
+                                    indAlignmentsOptions={indAlignmentsOptions}
+                                    indSettingsOptions={indSettingsOptions}
                                 />
                             )
                         )}

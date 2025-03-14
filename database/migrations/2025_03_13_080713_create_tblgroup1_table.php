@@ -4,14 +4,16 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+class CreateTblgroup1Table extends Migration
+{
     public function up()
     {
         Schema::create('tblgroup1', function (Blueprint $table) {
-            $table->id();
+            $table->id()->unsigned(); 
             $table->string('group1name');
             $table->string('group1code')->unique();
-            $table->timestamps();
+            $table->timestamps(0); // created_at and updated_at as timestamp fields
+            $table->primary('id');
         });
     }
 
@@ -19,4 +21,4 @@ return new class extends Migration {
     {
         Schema::dropIfExists('tblgroup1');
     }
-};
+}

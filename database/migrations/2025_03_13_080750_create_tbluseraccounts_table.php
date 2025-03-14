@@ -4,17 +4,20 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+class CreateTbluseraccountsTable extends Migration
+{
     public function up()
     {
         Schema::create('tbluseraccounts', function (Blueprint $table) {
-            $table->id('useraccountid');
-            $table->unsignedBigInteger('userid');
-            $table->string('username')->unique();
+            $table->id('useraccountid')->unsigned();
+            $table->bigInteger('userid')->unsigned();
+            $table->string('username');
             $table->string('password');
-            $table->boolean('is_active')->default(true);
+            $table->tinyInteger('is_active')->default(1);
             $table->string('useraccess');
-            $table->timestamps();
+            $table->timestamps(0);
+            $table->primary('useraccountid');
+            $table->unique('username');
         });
     }
 
@@ -22,4 +25,4 @@ return new class extends Migration {
     {
         Schema::dropIfExists('tbluseraccounts');
     }
-};
+}

@@ -8,20 +8,17 @@ import { useState } from "react";
 import AddLevelButton from "./AddLevelButton";
 import AddSublevelButton from "./AddSublevelButton";
 
-const NewRow = ({ indicator, indAlignments, indSettings }) => {
-    const [selectedAlignments, setSelectedAlignments] = useState([]);
-    const indAlignmentsOptions = indAlignments.map((item) => ({
-        value: item.indicators_alignment_id,
-        label: item.indicators_alignment_name,
-    }));
+const NewRow = ({
+    rows,
+    indicator,
+    indAlignmentsOptions,
+    indSettingsOptions,
+}) => {
+    const { data, setData } = useForm({
+        ind_name: indicator.ind_name,
+    });
 
-    const indSettingsOptions = [
-        { value: "", label: "-" },
-        ...indSettings.map((item) => ({
-            value: item.indicator_settings_id,
-            label: item.indicator_settings_name,
-        })),
-    ];
+    const [selectedAlignments, setSelectedAlignments] = useState([]);
 
     const handleMultiSelect = (value) => {
         setSelectedAlignments(value);
@@ -30,15 +27,29 @@ const NewRow = ({ indicator, indAlignments, indSettings }) => {
             value.map((v) => v.value)
         );
     };
+
+    const handleChange = (column, value) => {
+        console.log(column, value);
+    };
+
     return (
         <TableRow indicator={indicator.ind_id}>
             <TableCell className="px-1 py-0.5 text-center">
-                <AddSublevelButton hierarchy={indicator.ind_hierarchy} />
+                <AddSublevelButton
+                    rows={rows}
+                    hierarchy={indicator.ind_hierarchy}
+                />
             </TableCell>
             <TableCell className="px-1 py-0.5 text-center">
                 {indicator.ind_hierarchy}
             </TableCell>
-            <TableCell className="px-1 py-0.5"></TableCell>
+            <TableCell className="px-1 py-0.5">
+                <Input
+                    placeholder="Enter indicator"
+                    value={data.ind_name}
+                    onChange={(e) => handleChange("ind_name", e.target.value)}
+                />
+            </TableCell>
             <TableCell className="px-1 py-0.5 relative">
                 <Select
                     isMulti
@@ -58,7 +69,12 @@ const NewRow = ({ indicator, indAlignments, indSettings }) => {
                     classNamePrefix="select"
                 />
             </TableCell>
-            <TableCell className="px-1 py-0.5"></TableCell>
+            <TableCell className="px-1 py-0.5">
+                <Textarea
+                    placeholder="Enter definitions or examples"
+                    value={indicator.ind_definition}
+                />
+            </TableCell>
             <TableCell>
                 <div className="inline-flex space-x-2 items-center">
                     <Save className="cursor-pointer h-10" />
