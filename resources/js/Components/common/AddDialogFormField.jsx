@@ -26,6 +26,15 @@ const AddDialogFormField = ({
                 <Input id={id} type="text" className="col-span-3" {...props} />
             )}
 
+            {type === "number" && (
+                <Input
+                    id={id}
+                    type="number"
+                    className="col-span-3"
+                    {...props}
+                />
+            )}
+
             {type === "password" && (
                 <Input
                     id={id}

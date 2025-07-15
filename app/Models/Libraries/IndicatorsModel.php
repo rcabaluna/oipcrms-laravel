@@ -15,7 +15,8 @@ class IndicatorsModel extends Model
         'ind_name',
         'indicator_settings_id',
         'ind_definition',
-        'ind_is_deleted'
+        'ind_is_deleted',
+        'ind_is_head'
     ];
 
     public $timestamps = false;

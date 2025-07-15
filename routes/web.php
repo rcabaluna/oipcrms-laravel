@@ -26,12 +26,21 @@ Route::prefix('libraries/org-structure')->group(function () {
     Route::delete('/group3/{unit}', [OrgStructureController::class, 'group3Delete'])->name('org-structure.group3Delete');
 });
 
-Route::resource('/opcr/targets', TargetsController::class);
+
+Route::prefix('opcr/targets')->group(function(){
+    Route::get('/', [TargetsController::class, 'index'])->name('opcr.targets.index');
+    Route::get('/{targetsummaryid}', [TargetsController::class, 'show'])->name('opcr.targets.show');
+    Route::post('/store', [TargetsController::class, 'store'])->name('opcr.targets.store');
+    Route::put('/update/details/{targetdetailsid}', [TargetsController::class, 'updateDetailsValue'])->name(name: 'opcr.targets.details.value.update');
+    Route::put('/update/{targetsummaryid}', [TargetsController::class, 'update'])->name('opcr.targets.update');
+    Route::delete('/delete/{targetsummaryid}', [TargetsController::class, 'destroy'])->name('opcr.targets.destroy');
+});
+
 Route::resource('/opcr/accomplishments', AccomplishmentsController::class);
 
 
 Route::resource('/libraries/indicators', IndicatorsController::class)->only([
-    'index', 'store'
+    'index', 'store', 'update'
 ]);
 Route::post('/libraries/indicators/add-level', [IndicatorsController::class, 'addLevel'])->name('indicators.addLevel');
 Route::post('/libraries/indicators/add-sublevel', [IndicatorsController::class, 'addSubLevel'])->name('indicators.addSubLevel');

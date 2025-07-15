@@ -20,7 +20,14 @@ class IndicatorsController extends Controller
             FROM tblindicator_alignments_tagged
             JOIN tblindicator_alignments ON tblindicator_alignments.indicators_alignment_id = tblindicator_alignments_tagged.indicator_alignments_id
             WHERE tblindicator_alignments_tagged.ind_id = tblindicators.ind_id
-        ) AS tagged_alignments'))
+        ) AS tagged_alignments,
+        (
+            SELECT GROUP_CONCAT(indicators_alignment_id SEPARATOR \',\')
+            FROM tblindicator_alignments_tagged
+            JOIN tblindicator_alignments 
+                ON tblindicator_alignments.indicators_alignment_id = tblindicator_alignments_tagged.indicator_alignments_id
+            WHERE tblindicator_alignments_tagged.ind_id = tblindicators.ind_id
+        ) AS tagged_alignments_idx'))
         ->where('tblindicators.ind_is_deleted', '!=', 1)
         ->orderByRaw("
             CONCAT(
@@ -61,37 +68,44 @@ class IndicatorsController extends Controller
         return redirect()->back()->with('success', 'Indicator created successfully!');
 
     }
-
-   
     public function show(string $id)
     {
-        //
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        //
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Int $indicator)
     {
-        //
+        $data = $request->all();
+        
+        //check if the updatedData key is "indicator_alignments_id"
+
+        if (isset($data['updatedData']['indicator_alignments_id'])) {
+            $alignmentsTagged = $data['updatedData']['indicator_alignments_id'];
+            unset($data['updatedData']['indicator_alignments_id']);
+
+            // Delete existing alignments for the indicator
+            IndicatorAlignmentsTagged::where('ind_id', $indicator)->delete();
+
+            // Insert new alignments
+            foreach ($alignmentsTagged as $alignmentId) {
+                IndicatorAlignmentsTagged::create([
+                    'ind_id' => $indicator,
+                    'indicator_alignments_id' => $alignmentId
+                ]);
+            }
+        }
+        else{
+            $update = IndicatorsModel::where('ind_id', $indicator)->update($data['updatedData']);
+        }
+
+        return redirect()->back()->with('success', 'Indicator updated successfully!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        //
     }
-
+    
 
     public function addLevel(Request $request)
     {
@@ -100,7 +114,8 @@ class IndicatorsController extends Controller
         $newHierarchy = (int)$maxHierarchy + 1;
 
         $indicator = IndicatorsModel::create([
-            'ind_hierarchy' => (string)$newHierarchy,  // Store the new hierarchy as a string
+            'ind_hierarchy' => (string)$newHierarchy,
+            'ind_is_head' => 1
         ]);
 
         return redirect()->back()->with('success', 'Indicator created successfully!');

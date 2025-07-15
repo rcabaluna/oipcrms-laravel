@@ -54,7 +54,7 @@ const IndicatorsTable = ({ indicators = [] }) => {
                     <TableHeader className="bg-gray-100 sticky top-0">
                         <TableRow className="text-xs text-gray-700 text-center">
                             <TableCell className="bg-white">{""}</TableCell>
-                            <TableCell>No.</TableCell>
+                            <TableCell className="w-20">No.</TableCell>
                             <TableCell>Indicators</TableCell>
                             <TableCell>Alignment of Indicators</TableCell>
                             <TableCell>Setting of Targets</TableCell>

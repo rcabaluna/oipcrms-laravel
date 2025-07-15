@@ -36,7 +36,7 @@ const AddSublevelButton = ({ rows, hierarchy }) => {
 
     const handleSubmit = (newId) => {
         post("/libraries/indicators/add-sublevel", {
-            data: { ind_hierarchy: newId }, // Ensure correct data is passed
+            data: { ind_hierarchy: newId },
             preserveScroll: true,
             onSuccess: () => {
                 console.log("Sublevel added successfully!");
